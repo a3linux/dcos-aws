@@ -1,4 +1,4 @@
-AWS CloudFormation Teamplte of Mesosphere DCOS Tracking
+AWS CloudFormation Teamplate of Mesosphere DCOS Tracking
 =================================================================
 
 An easy repository to track Mesosphere DCOS Community version for AWS CloudFormation. The major problem of the mesosphere community template is hard to customize and track upstream, although Mesosphere guys already release the advanced version of it in their 1.6 release notes. This is another approach for such topic.
