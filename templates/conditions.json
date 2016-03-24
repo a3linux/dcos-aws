@@ -1,0 +1,9 @@
+"Conditions": {
+  "RegionIsUsEast1": {
+    "Fn::Equals": [{
+        "Ref": "AWS::Region"
+      },
+      "us-east-1"
+    ]
+  }
+}

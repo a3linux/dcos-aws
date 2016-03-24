@@ -1,0 +1,20 @@
+"Outputs": {
+  "DnsAddress": {
+    "Value": {
+      "Fn::GetAtt": [
+        "ElasticLoadBalancer",
+        "DNSName"
+      ]
+    },
+    "Description": "Mesos Master"
+  },
+  "PublicSlaveDnsAddress": {
+    "Value": {
+      "Fn::GetAtt": [
+        "PublicSlaveLoadBalancer",
+        "DNSName"
+      ]
+    },
+    "Description": "Public slaves"
+  }
+}

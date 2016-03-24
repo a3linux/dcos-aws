@@ -1,0 +1,118 @@
+"MasterServerGroup": {
+  "Type": "AWS::AutoScaling::AutoScalingGroup",
+  "CreationPolicy": {
+    "ResourceSignal": {
+      "Count": 3,
+      "Timeout": {
+        "Fn::FindInMap": [
+          "Parameters",
+          "StackCreationTimeout",
+          "default"
+        ]
+      }
+    }
+  },
+  "Properties": {
+    "Tags": [{
+      "Value": "mesos-master",
+      "Key": "role",
+      "PropagateAtLaunch": "true"
+    }],
+    "LaunchConfigurationName": {
+      "Ref": "MasterLaunchConfig"
+    },
+    "LoadBalancerNames": [{
+      "Ref": "ElasticLoadBalancer"
+    }, {
+      "Ref": "InternalMasterLoadBalancer"
+    }],
+    "VPCZoneIdentifier": {
+      "Ref": "PublicSubnets"
+    },
+    "MaxSize": 3,
+    "MinSize": 3,
+    "DesiredCapacity": 3
+  }
+},
+"PublicSlaveServerGroup": {
+  "Type": "AWS::AutoScaling::AutoScalingGroup",
+  "CreationPolicy": {
+    "ResourceSignal": {
+      "Count": {
+        "Ref": "PublicSlaveInstanceCount"
+      },
+      "Timeout": {
+        "Fn::FindInMap": [
+          "Parameters",
+          "StackCreationTimeout",
+          "default"
+        ]
+      }
+    }
+  },
+  "Properties": {
+    "Tags": [{
+      "Value": "mesos-slave",
+      "Key": "role",
+      "PropagateAtLaunch": "true"
+    }],
+    "LaunchConfigurationName": {
+      "Ref": "PublicSlaveLaunchConfig"
+    },
+    "LoadBalancerNames": [{
+      "Ref": "PublicSlaveLoadBalancer"
+    }],
+    "VPCZoneIdentifier": {
+      "Ref": "PublicSubnets"
+    },
+    "MaxSize": {
+      "Ref": "PublicSlaveInstanceCount"
+    },
+    "MinSize": {
+      "Ref": "PublicSlaveInstanceCount"
+    },
+    "DesiredCapacity": {
+      "Ref": "PublicSlaveInstanceCount"
+
+    }
+  }
+},
+"SlaveServerGroup": {
+  "Type": "AWS::AutoScaling::AutoScalingGroup",
+  "CreationPolicy": {
+    "ResourceSignal": {
+      "Count": {
+        "Ref": "SlaveInstanceCount"
+      },
+      "Timeout": {
+        "Fn::FindInMap": [
+          "Parameters",
+          "StackCreationTimeout",
+          "default"
+        ]
+      }
+    }
+  },
+  "Properties": {
+    "Tags": [{
+      "Value": "mesos-slave",
+      "Key": "role",
+      "PropagateAtLaunch": "true"
+    }],
+    "LaunchConfigurationName": {
+      "Ref": "SlaveLaunchConfig"
+    },
+    "VPCZoneIdentifier": {
+      "Ref": "PrivateSubnets"
+    },
+    "MaxSize": {
+      "Ref": "SlaveInstanceCount"
+    },
+    "MinSize": {
+      "Ref": "SlaveInstanceCount"
+    },
+    "DesiredCapacity": {
+      "Ref": "SlaveInstanceCount"
+    }
+  }
+}

@@ -1,0 +1,94 @@
+"Parameters": {
+  "AcceptEULA": {
+    "AllowedValues": [
+      "Yes"
+    ],
+    "Description": "\nRequired: Read the Mesosphere EULA and indicate agreement: https://docs.mesosphere.com/community-edition-eula/.",
+    "Type": "String"
+  },
+  "AdminLocation": {
+    "MaxLength": "18",
+    "ConstraintDescription": "must be a valid CIDR.",
+    "Default": "10.0.0.0/8",
+    "Description": "Optional: Specify the IP range to whitelist for access to the admin zone. Must be a valid CIDR.",
+    "Type": "String",
+    "AllowedPattern": "^([0-9]+\\.){3}[0-9]+\\/[0-9]+$",
+    "MinLength": "9"
+  },
+  "ExternalAdminSecurityGroup": {
+    "Type": "AWS::EC2::SecurityGroup::Id",
+    "Description": "The External Admin Security Group"
+  },
+  "Vpc": {
+    "Type": "AWS::EC2::VPC::Id",
+    "Description": "Target VPC"
+  },
+  "PublicSubnets": {
+    "Type": "List<AWS::EC2::Subnet::Id>",
+    "Description": "Sub networks for DCOS Mesos Masters, Public Slaves and NATInstance"
+  },
+  "PrivateSubnets": {
+    "Type": "List<AWS::EC2::Subnet::Id>",
+    "Description": "Sub networks for DCOS Mesos Private Slaves"
+  },
+  "SlaveInstanceCount": {
+    "Description": "Required: Specify the number of private agent nodes or accept the default.",
+    "Type": "Number",
+    "Default": "5"
+  },
+  "PublicSlaveInstanceCount": {
+    "Description": "Required: Specify the number of public agent nodes or accept the default.",
+    "Type": "Number",
+    "Default": "1"
+  },
+  "KeyName": {
+    "Description": "Required: Specify your AWS EC2 Key Pair.",
+    "Type": "AWS::EC2::KeyPair::KeyName"
+  },
+  "DockerHubAuth": {
+    "Type": "String",
+    "Description": "The Docker Hub Auth String in .dockercfg"
+  },
+  "DockerHubEmail": {
+    "Type": "String",
+    "Description": "The Docker Hub Email in .dockercfg"
+  },
+  "MasterInstanceType": {
+    "Type": "String",
+    "Description": "Mesos Master Instance Type, default is m3.medium",
+    "Default": "m3.medium"
+  },
+  "PublicSlaveInstanceType": {
+    "Type": "String",
+    "Description": "Mesos Public Slave Instance Type, default is c3.2xlarge",
+    "Default": "c3.2xlarge"
+  },
+  "PrivateSlaveInstanceType": {
+    "Type": "String",
+    "Description": "Mesos Private Slave Instance Type, default is c3.xlarge",
+    "Default": "c3.xlarge"
+  },
+  "ComputeSlaveInstanceType": {
+    "Type": "String",
+    "Description": "Mesos Compute Slaves(e.x. Spark nodes) Instance Type, default is r3.xlarge",
+    "Default": "r3.xlarge"
+  },
+  "LogArchiveS3Bucket": {
+    "Type": "String",
+    "Description": "Log Archive S3 Bucket"
+  },
+  "LogArchiveS3BucketEndpoint": {
+    "Type": "String",
+    "Description": "The Endpoint Log Archive S3 Bucket, for example, s3-us-west-1.amazonaws.com for S3 Bucket in US California",
+    "Default": "s3-us-west-1.amazonaws.com"
+  },
+  "ReposS3Bucket": {
+    "Type": "String",
+    "Description": "Software Repository S3 Bucket"
+  },
+  "ReposS3BucketEndpoint": {
+    "Type": "String",
+    "Description": "The Endpoint of Software Repository S3 Bucket, for example, s3-us-west-1.amazonaws.com for S3 Bucket in US California",
+    "Default": "s3-us-west-1.amazonaws.com"
+  }
+}

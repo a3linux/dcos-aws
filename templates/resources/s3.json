@@ -1,0 +1,4 @@
+"ExhibitorS3Bucket": {
+  "DeletionPolicy": "Retain",
+  "Type": "AWS::S3::Bucket"
+}

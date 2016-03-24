@@ -1,0 +1,119 @@
+"ElasticLoadBalancer": {
+  "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+  "Properties": {
+    "HealthCheck": {
+      "Target": "HTTP:5050/health",
+      "UnhealthyThreshold": "2",
+      "Interval": "30",
+      "Timeout": "5",
+      "HealthyThreshold": "2"
+    },
+    "SecurityGroups": [{
+      "Ref": "LbSecurityGroup"
+    }, {
+      "Ref": "AdminSecurityGroup"
+    }],
+    "Listeners": [{
+      "InstancePort": "80",
+      "Protocol": "HTTP",
+      "LoadBalancerPort": "80",
+      "InstanceProtocol": "HTTP"
+    }, {
+      "InstancePort": "443",
+      "Protocol": "TCP",
+      "LoadBalancerPort": "443",
+      "InstanceProtocol": "TCP"
+    }],
+    "Subnets": {
+      "Ref": "PublicSubnets"
+    }
+  }
+},
+"PublicSlaveLoadBalancer": {
+  "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+  "Properties": {
+    "HealthCheck": {
+      "Target": "HTTP:80/",
+      "UnhealthyThreshold": "2",
+      "Interval": "30",
+      "Timeout": "5",
+      "HealthyThreshold": "2"
+    },
+    "SecurityGroups": [{
+      "Ref": "PublicSlaveSecurityGroup"
+    }],
+    "Listeners": [{
+      "InstancePort": "80",
+      "Protocol": "HTTP",
+      "LoadBalancerPort": "80",
+      "InstanceProtocol": "HTTP"
+    }, {
+      "InstancePort": "443",
+      "Protocol": "TCP",
+      "LoadBalancerPort": "443",
+      "InstanceProtocol": "TCP"
+    }],
+    "Subnets": {
+      "Ref": "PublicSubnets"
+    }
+  }
+},
+"InternalMasterLoadBalancer": {
+  "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+  "Properties": {
+    "HealthCheck": {
+      "Target": "HTTP:5050/health",
+      "UnhealthyThreshold": "2",
+      "Interval": "30",
+      "Timeout": "5",
+      "HealthyThreshold": "2"
+
+    },
+    "SecurityGroups": [{
+      "Ref": "LbSecurityGroup"
+    }, {
+      "Ref": "AdminSecurityGroup"
+    }, {
+      "Ref": "SlaveSecurityGroup"
+    }, {
+      "Ref": "PublicSlaveSecurityGroup"
+    }, {
+      "Ref": "MasterSecurityGroup"
+    }],
+    "Listeners": [{
+      "InstancePort": "5050",
+      "Protocol": "HTTP",
+      "LoadBalancerPort": "5050",
+      "InstanceProtocol": "HTTP"
+    }, {
+      "InstancePort": "2181",
+      "Protocol": "TCP",
+      "LoadBalancerPort": "2181",
+      "InstanceProtocol": "TCP"
+    }, {
+      "InstancePort": "8181",
+      "Protocol": "HTTP",
+      "LoadBalancerPort": "8181",
+      "InstanceProtocol": "HTTP"
+    }, {
+      "InstancePort": "80",
+      "Protocol": "HTTP",
+      "LoadBalancerPort": "80",
+      "InstanceProtocol": "HTTP"
+    }, {
+      "InstancePort": "443",
+      "Protocol": "TCP",
+      "LoadBalancerPort": "443",
+      "InstanceProtocol": "TCP"
+    }, {
+      "InstancePort": "8080",
+      "Protocol": "HTTP",
+      "LoadBalancerPort": "8080",
+      "InstanceProtocol": "HTTP"
+    }],
+    "Scheme": "internal",
+    "Subnets": {
+      "Ref": "PublicSubnets"
+    }
+  }
+}

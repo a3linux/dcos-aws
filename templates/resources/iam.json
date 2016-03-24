@@ -1,0 +1,391 @@
+"MasterRole": {
+  "Type": "AWS::IAM::Role",
+  "Properties": {
+    "Path": "/",
+    "AssumeRolePolicyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [{
+        "Action": [
+          "sts:AssumeRole"
+        ],
+        "Principal": {
+          "Service": [
+            "ec2.amazonaws.com"
+          ]
+        },
+        "Effect": "Allow"
+      }]
+    },
+    "Policies": [{
+      "PolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [{
+          "Action": [
+            "s3:AbortMultipartUpload",
+            "s3:DeleteObject",
+            "s3:GetBucketAcl",
+            "s3:GetBucketPolicy",
+            "s3:GetObject",
+            "s3:GetObjectAcl",
+            "s3:ListBucket",
+            "s3:ListBucketMultipartUploads",
+            "s3:ListMultipartUploadParts",
+            "s3:PutObject",
+            "s3:PutObjectAcl"
+          ],
+          "Resource": [{
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "ExhibitorS3Bucket"
+                },
+                "/*"
+              ]
+            ]
+          }, {
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "ExhibitorS3Bucket"
+                }
+              ]
+            ]
+          }],
+          "Effect": "Allow"
+        }, {
+          "Action": [
+            "cloudformation:*"
+          ],
+          "Resource": [{
+            "Ref": "AWS::StackId"
+          }, {
+            "Fn::Join": [
+              "", [{
+                  "Ref": "AWS::StackId"
+                },
+                "/*"
+              ]
+            ]
+          }],
+          "Effect": "Allow"
+        }, {
+          "Action": [
+            "ec2:DescribeKeyPairs",
+            "ec2:DescribeSubnets",
+            "autoscaling:DescribeLaunchConfigurations",
+            "autoscaling:UpdateAutoScalingGroup",
+            "autoscaling:DescribeAutoScalingGroups",
+            "autoscaling:DescribeScalingActivities",
+            "elasticloadbalancing:DescribeLoadBalancers",
+            "ec2:AssignPrivateIpAddresses",
+            "ec2:DescribeInstances",
+            "ec2:AssociateAddress"
+          ],
+          "Resource": "*",
+          "Effect": "Allow"
+        }, {
+          "Resource": "*",
+          "Action": [
+            "cloudwatch:PutMetricAlarm",
+            "cloudwatch:GetMetricStatistics",
+            "cloudwatch:ListMetrics",
+            "cloudwatch:DescribeAlarms",
+            "cloudwatch:PutMetricData",
+            "cloudwatch:SetAlarmState",
+            "cloudwatch:EnableAlarmActions",
+            "cloudwatch:DisableAlarmActions"
+          ],
+          "Effect": "Allow"
+        }, {
+          "Resource": [{
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "LogArchiveS3Bucket"
+                }
+              ]
+            ]
+          }, {
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "LogArchiveS3Bucket"
+                },
+                "/*"
+              ]
+            ]
+          }, {
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "ReposS3Bucket"
+                },
+                "/*"
+              ]
+            ]
+          }, {
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "ReposS3Bucket"
+                }
+              ]
+            ]
+          }],
+          "Action": [
+            "s3:*"
+          ],
+          "Effect": "Allow"
+        }]
+      },
+      "PolicyName": "Masters"
+    }]
+  }
+},
+"PrivateSlaveRole": {
+  "Type": "AWS::IAM::Role",
+  "Properties": {
+    "AssumeRolePolicyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [{
+        "Action": [
+          "sts:AssumeRole"
+        ],
+        "Principal": {
+          "Service": [
+            "ec2.amazonaws.com"
+          ]
+        },
+        "Effect": "Allow"
+      }]
+    },
+    "Policies": [{
+      "PolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [{
+          "Action": [
+            "cloudformation:*"
+          ],
+          "Resource": [{
+            "Ref": "AWS::StackId"
+          }, {
+            "Fn::Join": [
+              "", [{
+                  "Ref": "AWS::StackId"
+                },
+                "/*"
+              ]
+            ]
+          }],
+          "Effect": "Allow"
+        }, {
+          "Resource": "*",
+          "Action": [
+            "ec2:DescribeKeyPairs",
+            "ec2:DescribeSubnets",
+            "autoscaling:DescribeLaunchConfigurations",
+            "autoscaling:UpdateAutoScalingGroup",
+            "autoscaling:DescribeAutoScalingGroups",
+            "autoscaling:DescribeScalingActivities",
+            "elasticloadbalancing:DescribeLoadBalancers",
+            "ec2:AssignPrivateIpAddresses",
+            "ec2:DescribeInstances",
+            "ec2:AssociateAddress"
+          ],
+          "Effect": "Allow"
+        }, {
+          "Resource": "*",
+          "Action": [
+            "cloudwatch:PutMetricAlarm",
+            "cloudwatch:GetMetricStatistics",
+            "cloudwatch:ListMetrics",
+            "cloudwatch:DescribeAlarms",
+            "cloudwatch:PutMetricData",
+            "cloudwatch:SetAlarmState",
+            "cloudwatch:EnableAlarmActions",
+            "cloudwatch:DisableAlarmActions"
+          ],
+          "Effect": "Allow"
+        }, {
+          "Resource": [{
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "LogArchiveS3Bucket"
+                }
+              ]
+            ]
+          }, {
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "LogArchiveS3Bucket"
+                },
+                "/*"
+              ]
+            ]
+          }, {
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "ReposS3Bucket"
+                },
+                "/*"
+              ]
+            ]
+          }, {
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "ReposS3Bucket"
+                }
+              ]
+            ]
+          }],
+          "Action": [
+            "s3:*"
+          ],
+          "Effect": "Allow"
+        }]
+      },
+      "PolicyName": "PrivateSlaves"
+    }]
+  }
+},
+"PublicSlaveRole": {
+  "Type": "AWS::IAM::Role",
+  "Properties": {
+    "AssumeRolePolicyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [{
+        "Action": [
+          "sts:AssumeRole"
+        ],
+        "Principal": {
+          "Service": [
+            "ec2.amazonaws.com"
+          ]
+        },
+        "Effect": "Allow"
+      }]
+    },
+    "Policies": [{
+      "PolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [{
+          "Action": [
+            "cloudformation:*"
+          ],
+          "Resource": [{
+            "Ref": "AWS::StackId"
+          }, {
+            "Fn::Join": [
+              "", [{
+                  "Ref": "AWS::StackId"
+                },
+                "/*"
+              ]
+            ]
+          }],
+          "Effect": "Allow"
+        }, {
+          "Resource": "*",
+          "Action": [
+            "ec2:DescribeKeyPairs",
+            "ec2:DescribeSubnets",
+            "autoscaling:DescribeLaunchConfigurations",
+            "autoscaling:UpdateAutoScalingGroup",
+            "autoscaling:DescribeAutoScalingGroups",
+            "autoscaling:DescribeScalingActivities",
+            "elasticloadbalancing:DescribeLoadBalancers",
+            "ec2:AssignPrivateIpAddresses",
+            "ec2:DescribeInstances",
+            "ec2:AssociateAddress"
+          ],
+          "Effect": "Allow"
+        }, {
+          "Resource": "*",
+          "Action": [
+            "cloudwatch:PutMetricAlarm",
+            "cloudwatch:GetMetricStatistics",
+            "cloudwatch:ListMetrics",
+            "cloudwatch:DescribeAlarms",
+            "cloudwatch:PutMetricData",
+            "cloudwatch:SetAlarmState",
+            "cloudwatch:EnableAlarmActions",
+            "cloudwatch:DisableAlarmActions"
+          ],
+          "Effect": "Allow"
+        }, {
+          "Resource": [{
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "LogArchiveS3Bucket"
+                }
+              ]
+            ]
+          }, {
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "LogArchiveS3Bucket"
+                },
+                "/*"
+              ]
+            ]
+          }, {
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "ReposS3Bucket"
+                },
+                "/*"
+              ]
+            ]
+          }, {
+            "Fn::Join": [
+              "", [
+                "arn:aws:s3:::", {
+                  "Ref": "ReposS3Bucket"
+                }
+              ]
+            ]
+          }],
+          "Action": [
+            "s3:*"
+          ],
+          "Effect": "Allow"
+        }]
+      },
+      "PolicyName": "PublicSlaves"
+    }]
+  }
+},
+"MasterInstanceProfile": {
+  "Type": "AWS::IAM::InstanceProfile",
+  "Properties": {
+    "Path": "/",
+    "Roles": [{
+      "Ref": "MasterRole"
+    }]
+  }
+},
+"PrivateSlaveInstanceProfile": {
+  "Type": "AWS::IAM::InstanceProfile",
+  "Properties": {
+    "Path": "/",
+    "Roles": [{
+      "Ref": "PrivateSlaveRole"
+    }]
+  }
+},
+"PublicSlaveInstanceProfile": {
+  "Type": "AWS::IAM::InstanceProfile",
+  "Properties": {
+    "Path": "/",
+    "Roles": [{
+      "Ref": "PublicSlaveRole"
+    }]
+  }
+}
